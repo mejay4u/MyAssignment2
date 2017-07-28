@@ -34,23 +34,35 @@ namespace MyAssignment2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ProductModal product)
         {
-            if(ModelState.IsValid)
+          
+            if (Request.Files.Count>3)
+            {
+                ModelState.AddModelError("ImageUpload", "This field is required");
+            }
+           
+            if (ModelState.IsValid)
             {
                 List<ProductImageModal> imageDetails = new List<ProductImageModal>();
+
                 for(int i=0;i<Request.Files.Count;i++)
                 {
+                    int imageln = Request.Files[i].ContentLength;
+                    byte[] picByte = new byte[imageln];
+                    Request.Files[i].InputStream.Read(picByte, 0, imageln);
                     var file = Request.Files[i];
                     if(file!=null && file.ContentLength>0)
                     {
                         var fileName = Path.GetFileName(file.FileName);
                         ProductImageModal images = new ProductImageModal()
                         {
-                            ImageUrl = fileName
+                            ImageUrl = fileName,
+                            Image=picByte
+                          
                        
 
                         };
                         imageDetails.Add(images);
-                        var path = Path.Combine(Server.MapPath("~/App_Data/Uploads/"),images.ImageUrl);
+                        var path = Path.Combine(Server.MapPath("~/Uploads/"),images.ImageUrl);
                         file.SaveAs(path);
                     }
                 }
@@ -79,7 +91,7 @@ namespace MyAssignment2.Controllers
         }
         public FileResult Download(string p, string d)
         {
-            return File(Path.Combine(Server.MapPath("~/App_Data/Upload/"), p), System.Net.Mime.MediaTypeNames.Application.Octet, d);
+            return File(Path.Combine(Server.MapPath("~/Uploads/"), p), System.Net.Mime.MediaTypeNames.Application.Octet, d);
         } 
 
         [HttpPost]
@@ -93,13 +105,17 @@ namespace MyAssignment2.Controllers
                     var file = Request.Files[i];
                     if(file !=null && file.ContentLength>0)
                     {
+                        int imageln = Request.Files[i].ContentLength;
+                        byte[] picByte = new byte[imageln];
+                        Request.Files[i].InputStream.Read(picByte, 0, imageln);
                         var fileName = Path.GetFileName(file.FileName);
                         ProductImageModal imageModal = new ProductImageModal()
                         {
                             ImageUrl = fileName,
-                            ProductId=product.ProductID
+                            ProductId=product.ProductID,
+                              Image = picByte
                         };
-                        var path = Path.Combine(Server.MapPath("~/App_Data/Upload/"), imageModal.ProductId + fileName);
+                        var path = Path.Combine(Server.MapPath("~/Uploads/"),fileName);
                         file.SaveAs(path);
                         db.Entry(imageModal).State = EntityState.Added;
                     }
@@ -113,7 +129,7 @@ namespace MyAssignment2.Controllers
         }
 
         [HttpPost]
-        public JsonResult  DeleteFiles(int? id)
+        public JsonResult DeleteFile(int? id)
         {
             if(id==null)
             {
@@ -131,7 +147,7 @@ namespace MyAssignment2.Controllers
                 db.ProductImages.Remove(imageModal);
                 db.SaveChanges();
 
-                var path = Path.Combine(Server.MapPath("~/App_Data/Upload/"), imageModal.ImageId + imageModal.ImageUrl);
+                var path = Path.Combine(Server.MapPath("~/Uploads/"), imageModal.ImageUrl);
                 if(System.IO.File.Exists(path))
                 {
                     System.IO.File.Delete(path);
@@ -150,7 +166,11 @@ namespace MyAssignment2.Controllers
         {
             try
             {
-                ProductModal product = new ProductModal();
+                var y = (from x in db.Products where x.ProductID == id select x).First();
+                var z = (from x in db.ProductImages where x.ProductId == id select x).First();
+                ProductModal product = db.Products.Find(id);
+                ProductImageModal productImage = new ProductImageModal();
+                productImage.ProductId = id;
                 if(product==null)
                 {
                     Response.StatusCode = (int)HttpStatusCode.NotFound;
@@ -159,13 +179,16 @@ namespace MyAssignment2.Controllers
 
                 foreach(var item in product.ImageDetails)
                 {
-                    string path = Path.Combine(Server.MapPath("~/App_Data/Upload/"), item.ProductId + item.ImageUrl);
+                    string path = Path.Combine(Server.MapPath("~/Uploads/"),item.ImageUrl);
                     if (System.IO.File.Exists(path))
                     {
                         System.IO.File.Delete(path);
                     }
                 }
-                db.Products.Remove(product);
+               
+          
+                db.Products.Remove(y);
+                db.ProductImages.Remove(z);
                 db.SaveChanges();
                 return Json(new { Result = "OK" });
             }

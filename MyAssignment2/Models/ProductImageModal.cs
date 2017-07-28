@@ -14,5 +14,6 @@ namespace MyAssignment2.Models
         public int ImageId { get; set; }
         public string ImageUrl { get; set; }
        public int? ProductId { get; set; }
+        public byte[] Image { get; set; }
     }
 }

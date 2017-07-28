@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Products</h2>
 
 <p>
     <div class="row pull-right">
@@ -40,7 +40,7 @@
             @Html.DisplayNameFor(m => m.ContactTelephone)
         </th>
         <th>
-            </th>
+        </th>
     </tr>
     @foreach (var item in Model)
     {
@@ -71,9 +71,35 @@
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ProductID }, new { @class = "btn btn-warning btn-xs" })  |
-              
-                @Html.ActionLink("Delete", "Delete", new { id = item.ProductID }, new { @class = "btn btn-danger btn-xs" })
-             
+                <a href="javascript:void(0);" class="deleteItem btn btn-danger btn-xs" data-id="@item.ProductID">Delete</a>
+   
+
         </tr>
     }
 </table>
+
+@section Scripts {
+    <script type="text/javascript">
+        $('.deleteItem').click(function (e) {
+            e.preventDefault();
+            var $ctrl = $(this);
+            if (confirm('Do you really want to delete this item?')) {
+                $.ajax({
+                    url: '@Url.Action("Delete")',
+                    type: 'POST',
+                    data: { id: $(this).data('id') }
+                }).done(function (data) {
+                    if (data.Result == "OK") {
+                        $ctrl.closest('tr').remove();
+                    }
+                    else if (data.Result.Message) {
+                        alert(data.Result.Message);
+                    }
+                }).fail(function () {
+                    alert("There is something wrong. Please try again.");
+                })
+
+            }
+        });
+    </script>
+}

@@ -42,7 +42,7 @@ namespace MyAssignment2.Models
         public string ConatctName { get; set; }
 
         [Required(ErrorMessage = "Please provide Contact Email")]
-        [Display(Name = "Product Code")]
+        [Display(Name = "Contact Email")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string ConatctEmail { get; set; }
 
