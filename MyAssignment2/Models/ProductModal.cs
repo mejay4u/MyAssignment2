@@ -10,7 +10,8 @@ namespace MyAssignment2.Models
     [Table("Products")]
     public class ProductModal
     {
-        public int ProductID { get; set; }
+        [Key]
+        public int? ProductID { get; set; }
 
         [Required(ErrorMessage ="Please provide product name")]
         [Display(Name ="Product Name")]
@@ -29,7 +30,7 @@ namespace MyAssignment2.Models
 
         [Required(ErrorMessage = "Please provide product price")]
         [Display(Name = "Price")]
-        public int Price { get; set; }
+        public decimal Price { get; set; }
 
         [Required(ErrorMessage = "Please provide product quantity")]
         [Display(Name = "Quantity")]
@@ -48,6 +49,8 @@ namespace MyAssignment2.Models
         [Required(ErrorMessage = "Please provide contact telephone")]
         [Display(Name = "Telephone")]
         public int ContactTelephone { get; set; }
+
+        public virtual ICollection<ProductImageModal> ImageDetails { get; set; }
 
 
     }

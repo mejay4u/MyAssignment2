@@ -24,7 +24,7 @@ namespace MyAssignment2
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
+                      "~/Content/lumnebootstrap.min.css",
                       "~/Content/site.css"));
         }
     }
