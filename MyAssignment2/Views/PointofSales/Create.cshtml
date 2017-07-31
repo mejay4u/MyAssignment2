@@ -1,0 +1,99 @@
+﻿@model MyAssignment2.Models.Entries.PointofSales
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="x_panel">
+        <div class="x_title col-sm-12">
+
+            <h2>New Sales Bill </h2>
+
+
+
+            <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    <a class="collapse-link"></a>
+                </li>
+                <li>
+                    <a class="collapse-link"></a>
+                </li>
+                <li>
+                    <a class="collapse-link"></a>
+                </li>
+                <li>
+                    <a class="collapse-link"></a>
+                </li>
+                <li>
+                    <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="x_content">
+            <section style="background-color: white;">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="form-group">
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>
+                                        @Html.LabelFor(model => model.InvoiceNo)
+                                    </label>
+                                    @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>
+                                        @Html.LabelFor(model => model.ServiceType)
+                                    </label>
+                                    @Html.DropDownListFor(model => model.ServiceType, Model.ServiceTypeList, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>
+                                        @Html.LabelFor(model => model.RooomId)
+                                    </label>
+                                    @Html.DropDownListFor(model => model.RooomId, Model.RoomList, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.RooomId, "", new { @class = "text-danger" })
+                                </div>
+                         
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <label>
+                                            @Html.LabelFor(model => model.TableId)
+                                        </label>
+                                        @Html.DropDownListFor(model => model.TableId, Model.TableList, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.TableId, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label>
+                                            @Html.LabelFor(model => model.ItemId)
+                                        </label>
+                                        @Html.DropDownListFor(model => model.ItemId, Model.ItemList, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.ItemId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+}
+

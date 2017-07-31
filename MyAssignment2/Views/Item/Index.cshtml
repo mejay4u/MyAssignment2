@@ -1,0 +1,68 @@
+﻿@model IEnumerable<MyAssignment2.Models.Masters.Items>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+<hr />
+<p>
+    <div class="row pull-right">
+        <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("Create","Item")'" style="margin-right: 15px;margin-bottom: 10px;" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-plus"> </i> New</button>
+    </div>
+
+</p>
+
+<table class="table table-bordered table-hover table-responsive">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ItemName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ItemCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UnitId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ItemGroupId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TableRate)
+        </th>
+        <th>Actions</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ItemName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ItemCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Unit.UnitName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ItemGroups.ItemGroupName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RoomRate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TableRate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.ItemId }, new { @class = "btn btn-warning btn-xs" }) |
+            @Html.ActionLink("Details", "Details", new { id = item.ItemId }, new { @class = "btn btn-info btn-xs" }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ItemId }, new { @class = "btn btn-danger btn-xs" })
+        </td>
+    </tr>
+}
+
+</table>

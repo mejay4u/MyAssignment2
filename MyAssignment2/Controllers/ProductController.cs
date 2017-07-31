@@ -35,7 +35,7 @@ namespace MyAssignment2.Controllers
         public ActionResult Create(ProductModal product)
         {
           
-            if (Request.Files.Count>3)
+            if (Request.Files.Count>4)
             {
                 ModelState.AddModelError("ImageUpload", "This field is required");
             }

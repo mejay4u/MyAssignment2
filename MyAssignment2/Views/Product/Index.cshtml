@@ -5,7 +5,7 @@
 }
 
 <h2>Products</h2>
-
+<hr />
 <p>
     <div class="row pull-right">
         <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("Create", "Product")'" style="margin-right: 15px;margin-bottom: 10px;" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-plus"> </i> New</button>
@@ -40,6 +40,7 @@
             @Html.DisplayNameFor(m => m.ContactTelephone)
         </th>
         <th>
+            Actions
         </th>
     </tr>
     @foreach (var item in Model)

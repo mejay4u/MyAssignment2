@@ -1,0 +1,43 @@
+﻿@model IEnumerable<MyAssignment2.Models.Masters.Tables>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+<hr/>
+<p>
+    <div class="row pull-right">
+        <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("Create","Tables")'" style="margin-right: 15px;margin-bottom: 10px;" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-plus"> </i> New</button>
+    </div>
+
+</p>
+<table class="table table-bordered table-hover table-responsive">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TableName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Capacity)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TableName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Capacity)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.TableId }, new { @class = "btn btn-warning btn-xs" }) |
+            @Html.ActionLink("Details", "Details", new { id = item.TableId }, new { @class = "btn btn-info btn-xs" }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.TableId }, new { @class = "btn btn-danger btn-xs" })
+        </td>
+    </tr>
+}
+
+</table>
