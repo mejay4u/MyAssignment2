@@ -3,7 +3,9 @@
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<link href="~/Scripts/jquery-ui-1.11.4.custom/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Scripts/jquery-ui-1.11.4.custom/jquery-ui.theme.min.css" rel="stylesheet" />
+<link href="~/Scripts/jquery-ui-1.11.4.custom/jquery-ui.structure.min.css" rel="stylesheet" />
 <h2>Create</h2>
 
 @using (Html.BeginForm())
@@ -39,51 +41,76 @@
         <div class="x_content">
             <section style="background-color: white;">
                 <div class="row">
-                    <div class="col-sm-8">
+                    <div class="col-sm-12">
                         <div class="form-group">
 
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     <label>
                                         @Html.LabelFor(model => model.InvoiceNo)
                                     </label>
-                                    @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.EditorFor(model => model.CurruntInvoiceNo, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
                                     @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-3">
                                     <label>
                                         @Html.LabelFor(model => model.ServiceType)
                                     </label>
                                     @Html.DropDownListFor(model => model.ServiceType, Model.ServiceTypeList, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
                                 </div>
-                                <div class="col-lg-4">
+                                <div class="col-lg-3">
                                     <label>
                                         @Html.LabelFor(model => model.RooomId)
                                     </label>
                                     @Html.DropDownListFor(model => model.RooomId, Model.RoomList, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(model => model.RooomId, "", new { @class = "text-danger" })
                                 </div>
-                         
+                                <div class="col-lg-3">
+                                    <label>
+                                        @Html.LabelFor(model => model.TableId)
+                                    </label>
+                                    @Html.DropDownListFor(model => model.TableId, Model.TableList, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.TableId, "", new { @class = "text-danger" })
+                                </div>
+
                             </div>
                         </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
 
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <label>
-                                            @Html.LabelFor(model => model.TableId)
-                                        </label>
-                                        @Html.DropDownListFor(model => model.TableId, Model.TableList, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.TableId, "", new { @class = "text-danger" })
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <label>
-                                            @Html.LabelFor(model => model.ItemId)
-                                        </label>
-                                        @Html.DropDownListFor(model => model.ItemId, Model.ItemList, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.ItemId, "", new { @class = "text-danger" })
+
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <label>
+                                                @Html.LabelFor(model => model.ItemCode)
+                                            </label>
+                                            @Html.EditorFor(model => model.ItemCode, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.ItemCode, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <label>
+                                                @Html.LabelFor(model => model.ItemId)
+                                            </label>
+                                            @Html.DropDownListFor(model => model.ItemId, Model.ItemList, new { @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.ItemId, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <label>
+                                                @Html.LabelFor(model => model.ItemRate)
+                                            </label>
+                                            @Html.EditorFor(model => model.ItemRate, new { htmlAttributes = new { @class = "form-control", @readonly = true } })
+                                            @Html.ValidationMessageFor(model => model.ItemRate, "", new { @class = "text-danger" })
+                                        </div>
+                                          <div class="col-lg-3">
+                                            <label>
+                                                @Html.LabelFor(model => model.Qty)
+                                            </label>
+                                            @Html.EditorFor(model => model.Qty, new { htmlAttributes = new { @class = "form-control"} })
+                                            @Html.ValidationMessageFor(model => model.Qty, "", new { @class = "text-danger" })
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -93,6 +120,65 @@
             </section>
         </div>
     </div>
+
+
+}
+
+@section Scripts {
+    <script src="~/Scripts/PointofSale/PointofSales.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#ItemCode").autocomplete({
+                source: function (request, response) {
+                    var param = { per: $('#ItemCode').val() };
+                    $.ajax({
+                        url: "/PointofSales/AutoComplete",
+                        data: "{ 'prefix': '" + request.term + "'}",
+                        dataType: "json",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        dataFilter: function (data) { return data; },
+                        success: function (data) {
+
+                            response($.map(data, function (item) {
+
+                                return {
+
+                                    value: item
+                                }
+                            }))
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            var err = eval("(" + XMLHttpRequest.responseText + ")");
+                            alert(err.Message);
+                            // console.log("Ajax Error!");
+                        }
+                    });
+                },
+                minLength: 1 //This is the Char length of inputTextBox
+            });
+        });
+
+        $(document).ready(function () {
+            $('#ItemCode').on('change', function () {
+
+            }).change();
+            $('#ItemCode').on('autocompleteselect', function (e, ui) {
+
+                var rest = ui.item.value;
+
+
+                var str = rest.split(':');
+                var final = str[0];
+
+                $('#ItemId').val(final.trim());
+                // console.log(str[0]);
+                // ItemCode(str[0]);
+
+            });
+        });
+    </script>
 
 
 }
